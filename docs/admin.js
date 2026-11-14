@@ -1,7 +1,7 @@
-import {cmsApi as api} from './supabase-cms.js?v=fa4d011d3785';
-import { siteSettings } from './site-settings.js?v=fa4d011d3785';
-import { scheduleEditor } from './admin-schedule.js?v=fa4d011d3785';
-import { copyDefaults, copyGroups } from './copy-defaults.js?v=fa4d011d3785';
+import {cmsApi as api} from './supabase-cms.js?v=e9179ffa8b18';
+import { siteSettings } from './site-settings.js?v=e9179ffa8b18';
+import { scheduleEditor } from './admin-schedule.js?v=e9179ffa8b18';
+import { copyDefaults, copyGroups } from './copy-defaults.js?v=e9179ffa8b18';
 const $ = s => document.querySelector(s);
 const settingsLabels={discountText:'Скидки и предоплата',termsTitle:'Заголовок условий',termsText:'Что входит в стоимость и сроки обжига',celebrationText:'Праздники и дополнительные услуги',benefitsTitle:'Заголовок преимуществ',benefitsIntro:'Вступление к преимуществам',benefit1Title:'Преимущество 1 — заголовок',benefit1Text:'Преимущество 1 — описание',benefit2Title:'Преимущество 2 — заголовок',benefit2Text:'Преимущество 2 — описание',benefit3Title:'Преимущество 3 — заголовок',benefit3Text:'Преимущество 3 — описание',aboutCaption:'Подпись фото мастерской',togetherCaption:'Подпись фото свидания',galleryText:'Текст рядом с галереей',scheduleFootnote:'Примечание под расписанием'};
 function imagePicker(key,value){

@@ -5,13 +5,22 @@
   <title>Братская керамика — гончарная мастерская</title>
   <meta name="description" content="Гончарный круг, ручная лепка, творческие встречи для двоих и детские курсы. Прикоснитесь к старинному ремеслу.">
   <meta name="theme-color" content="#f2e6cf">
+  <style>
+    body.site-loading{margin:0;background:#f2e6cf}
+    body.site-loading>:not(.site-loader):not(script):not(noscript){visibility:hidden}
+    .site-loader{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:24px;background:#f2e6cf;color:#694d39;text-align:center;font:14px/1.6 sans-serif}
+    .site-loader img{width:220px;max-width:75vw;height:auto}
+    .site-loader[hidden]{display:none}
+    .site-loader button{padding:12px 20px;border:1px solid #813b32;background:transparent;color:#813b32;font:inherit;cursor:pointer}
+  </style>
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="/assets/fonts/ruslan-display.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" href="/assets/fonts/golos-regular.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/structure.css"><link rel="stylesheet" href="/polish.css"><link rel="stylesheet" href="/photos.css"><script src="/app.js" type="module"></script>
   <link rel="stylesheet" href="/sections.css">
 </head>
-<body>
+<body class="site-loading">
+<div id="site-loader" class="site-loader" role="status" aria-live="polite"><img src="/assets/brand/logo-linen.png" alt="Братская керамика" width="1952" height="832"><p>Загружаем мастерскую…</p></div>
 <a class="skip-link" href="#main">Перейти к содержимому</a>
 <div class="top-line" aria-hidden="true"></div>
 <header class="site-header wrap">

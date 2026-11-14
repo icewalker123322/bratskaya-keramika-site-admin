@@ -239,7 +239,15 @@ $('#gallery-grid').addEventListener('click', e => {
 });
 $('#lightbox').addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();showGallery(galleryIndex+(e.key==='ArrowRight'?1:-1));const item=galleryItems[galleryIndex];$('#lightbox-image').src=item.image;$('#lightbox-image').alt=item.caption;$('#lightbox-caption').textContent=item.caption;}});
 async function load() {
-  try { const r = await fetch('/api/content'); if (!r.ok) throw new Error(); content = await r.json(); content.copy={...copyDefaults,...content.copy}; render(); }
-  catch { $('#course-grid').innerHTML = '<div class="error-banner">Не удалось загрузить занятия. Проверьте соединение и <button id="retry-load" class="text-link">попробуйте ещё раз</button>.</div>'; $('#retry-load').addEventListener('click', load); }
+  try { const r = await fetch('/api/content'); if (!r.ok) throw new Error(); content = await r.json(); content.copy={...copyDefaults,...content.copy}; render();
+    const firstImages=[...document.querySelectorAll('.site-header img, .hero img')].filter(image=>!image.closest('[hidden], .section-screen-hidden'));
+    await Promise.all(firstImages.map(image=>image.decode().catch(()=>{})));
+    document.body.classList.remove('site-loading');$('#site-loader').hidden=true;
+  }
+  catch {
+    const target=document.body.classList.contains('site-loading')?$('#site-loader'):$('#course-grid');
+    target.innerHTML='<p>Не удалось загрузить сайт. Проверьте соединение.</p><button id="retry-load" type="button">Попробовать ещё раз</button>';
+    $('#retry-load').addEventListener('click',()=>{$('#retry-load').disabled=true;load();});
+  }
 }
 renderSchedule(); load();

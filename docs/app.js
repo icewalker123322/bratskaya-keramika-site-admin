@@ -1,7 +1,7 @@
-import {loadContent} from './supabase-cms.js?v=fa4d011d3785';
-import { copyDefaults } from './copy-defaults.js?v=fa4d011d3785';
-import { renderWorkshopInfo } from './workshop-info.js?v=fa4d011d3785';
-import { setupSections } from './sections.js?v=fa4d011d3785';
+import {loadContent} from './supabase-cms.js?v=e9179ffa8b18';
+import { copyDefaults } from './copy-defaults.js?v=e9179ffa8b18';
+import { renderWorkshopInfo } from './workshop-info.js?v=e9179ffa8b18';
+import { setupSections } from './sections.js?v=e9179ffa8b18';
 const $ = s => document.querySelector(s);
 const escape = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const icon = name => `<svg aria-hidden="true"><use href="./assets/ornaments.svg#${name}"/></svg>`;
@@ -240,7 +240,15 @@ $('#gallery-grid').addEventListener('click', e => {
 });
 $('#lightbox').addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();showGallery(galleryIndex+(e.key==='ArrowRight'?1:-1));const item=galleryItems[galleryIndex];$('#lightbox-image').src=item.image;$('#lightbox-image').alt=item.caption;$('#lightbox-caption').textContent=item.caption;}});
 async function load() {
-  try { content = await loadContent(); content.copy={...copyDefaults,...content.copy}; render(); }
-  catch { $('#course-grid').innerHTML = '<div class="error-banner">Не удалось загрузить занятия. Проверьте соединение и <button id="retry-load" class="text-link">попробуйте ещё раз</button>.</div>'; $('#retry-load').addEventListener('click', load); }
+  try { content = await loadContent(); content.copy={...copyDefaults,...content.copy}; render();
+    const firstImages=[...document.querySelectorAll('.site-header img, .hero img')].filter(image=>!image.closest('[hidden], .section-screen-hidden'));
+    await Promise.all(firstImages.map(image=>image.decode().catch(()=>{})));
+    document.body.classList.remove('site-loading');$('#site-loader').hidden=true;
+  }
+  catch {
+    const target=document.body.classList.contains('site-loading')?$('#site-loader'):$('#course-grid');
+    target.innerHTML='<p>Не удалось загрузить сайт. Проверьте соединение.</p><button id="retry-load" type="button">Попробовать ещё раз</button>';
+    $('#retry-load').addEventListener('click',()=>{$('#retry-load').disabled=true;load();});
+  }
 }
 renderSchedule(); load();
