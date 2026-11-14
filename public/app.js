@@ -206,14 +206,15 @@ $('#schedule-today').addEventListener('click',()=>{month=new Date(`${localNow.sl
 
 function render() {
   document.title = `${content.name} — живое ремесло`;
+  const originalLogo = /(?:^|\/)assets\/brand\/logo-poster\.png(?:[?#].*)?$/.test(content.logoImage || '');
   for(const element of document.querySelectorAll('[data-copy]'))element.textContent=content.copy[element.dataset.copy]??'';
   for (const b of document.querySelectorAll('[data-brand]')) {
     b.textContent = content.name;
     b.parentElement.setAttribute('aria-label', `${content.name} — на главную`);
     b.parentElement.querySelector('svg').toggleAttribute('hidden', Boolean(content.logoImage));
-    if (content.logoImage === '/assets/brand/logo-poster.png' && b.closest('.site-header')) {
+    if (originalLogo && b.closest('.site-header')) {
       b.innerHTML = `<img class="brand-logo brand-logo-linen" src="/assets/brand/logo-linen.png" alt="${escape(content.name)}" width="1952" height="832">`;
-    } else if (content.logoImage === '/assets/brand/logo-poster.png') {
+    } else if (originalLogo) {
       b.innerHTML = `<span class="footer-logo-transparent"><img src="/assets/brand/logo-linen.png" alt="${escape(content.name)}" width="1952" height="832"><img class="footer-logo-lettering" src="/assets/brand/logo-linen.png" alt="" aria-hidden="true" width="1952" height="832"></span>`;
     } else if (content.logoImage) {
       b.innerHTML = `<img class="brand-logo" src="${escape(content.logoImage)}" alt="${escape(content.name)}">`;
