@@ -1,6 +1,7 @@
 import { copyDefaults } from './copy-defaults.js';
 import { renderWorkshopInfo } from './workshop-info.js';
 import { setupSections } from './sections.js';
+import { photoAttributes, setPhoto } from './images.js';
 const $ = s => document.querySelector(s);
 const escape = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const icon = name => `<svg aria-hidden="true"><use href="/assets/ornaments.svg#${name}"/></svg>`;
@@ -35,7 +36,7 @@ matchMedia('(min-width: 621px)').addEventListener('change', e => { if (e.matches
 function renderCourses() {
   const courses = content.courses.filter(c => category === 'all' || c.category === category);
   $('#course-grid').innerHTML = courses.length ? courses.map(c => `<article class="course-card ${category === 'all' && c.category !== 'pottery' ? 'course-card-secondary' : ''}">
-    <button class="course-image-button" data-course="${escape(c.id)}" aria-label="Подробнее: ${escape(c.title)}"><img src="${escape(artwork(c))}" data-art="${escape(c.art)}" alt="${c.image ? escape(c.title) : 'Графический эскиз керамики'}" width="640" height="520" loading="lazy">${!c.image ? '<span class="course-art-label">Эскиз направления</span>' : ''}</button>
+    <button class="course-image-button" data-course="${escape(c.id)}" aria-label="Подробнее: ${escape(c.title)}"><img ${photoAttributes(artwork(c))} data-art="${escape(c.art)}" alt="${c.image ? escape(c.title) : 'Графический эскиз керамики'}" width="640" height="520" loading="lazy">${!c.image ? '<span class="course-art-label">Эскиз направления</span>' : ''}</button>
     <p class="course-subtitle">${escape(c.subtitle)}</p><h3 class="course-title">${escape(c.title)}</h3><p class="course-description">${escape(c.description)}</p>${c.duration || c.age ? `<p class="course-meta">${escape([c.duration, c.age].filter(Boolean).join(' · '))}</p>` : ''}
     <div class="course-bottom"><span class="course-price ${c.price ? '' : 'unset'}">${escape(c.price || 'Стоимость уточняется')}</span><button class="course-detail" data-course="${escape(c.id)}">Подробнее ${icon('arrow')}</button></div></article>`).join('') : '<p class="error-banner">В этом направлении занятия пока не опубликованы.</p>';
 }
@@ -72,7 +73,7 @@ function showHero(index, announce = true) {
   $('#hero-title').innerHTML = lines.map((line,i) => i === lines.length-1 ? `<span>${escape(line)}</span>` : escape(line)).join('<br>');
   $('#tagline').textContent = slide.eyebrow;
   $('#hero-description').textContent = slide.text;
-  $('#hero-image').src = slide.image;
+  setPhoto($('#hero-image'),slide.image);
   $('#hero-image').alt = slide.photo ? slide.title.replaceAll('\n',' ') : `Графический эскиз: ${slide.label.toLowerCase()}`;
   $('#hero-caption').firstElementChild.textContent = `${String(heroIndex+1).padStart(2,'0')} / ${slide.label}`;
   $('#hero-caption').lastElementChild.textContent = slide.photo ? 'В нашей мастерской' : 'Эскиз до появления фотографий';
@@ -97,7 +98,7 @@ function renderFeatures() {
   if(date && $('#together')){
     $('#together-title').textContent=date.title;
     $('#together-description').textContent=date.description;
-    $('#together-image').src=artwork(date);
+    setPhoto($('#together-image'),artwork(date));
     $('#together-image').alt=date.image?date.title:'Эскиз двух глиняных изделий';
     $('#together-price').textContent=date.price||'Стоимость уточняется';
     $('#together-duration').textContent=date.duration;
@@ -107,7 +108,7 @@ function renderFeatures() {
   const kids=content.courses.filter(c=>c.category==='kids');
   $('#children').hidden=!kids.length;
   for(const link of document.querySelectorAll('a[href="#children"]'))link.hidden=!kids.length;
-  $('#kids-courses').innerHTML=kids.map(c=>`<article class="kids-course"><div class="kids-photo-frame"><img src="${escape(artwork(c))}" alt="${escape(c.image?c.title:'Эскиз детского курса')}" width="150" height="170" loading="lazy"></div><div><p class="course-subtitle">${escape(c.subtitle)}</p><h3>${escape(c.title)}</h3><p>${escape(c.description)}</p><div class="kids-course-bottom"><span>${escape([c.price||'Стоимость уточняется',c.age].filter(Boolean).join(' · '))}</span><button class="course-detail" data-course="${escape(c.id)}">О курсе ${icon('arrow')}</button></div></div></article>`).join('');
+  $('#kids-courses').innerHTML=kids.map(c=>`<article class="kids-course"><div class="kids-photo-frame"><img ${photoAttributes(artwork(c))} alt="${escape(c.image?c.title:'Эскиз детского курса')}" width="150" height="170" loading="lazy"></div><div><p class="course-subtitle">${escape(c.subtitle)}</p><h3>${escape(c.title)}</h3><p>${escape(c.description)}</p><div class="kids-course-bottom"><span>${escape([c.price||'Стоимость уточняется',c.age].filter(Boolean).join(' · '))}</span><button class="course-detail" data-course="${escape(c.id)}">О курсе ${icon('arrow')}</button></div></div></article>`).join('');
 }
 
 function renderMasters() {
@@ -115,7 +116,7 @@ function renderMasters() {
   const guests=content.courses.filter(c=>c.category==='guest');
   $('[data-filter="guest"]').hidden=!guests.length;
   $('#schedule-filter option[value="guest"]').hidden=!guests.length;
-  const profiles=content.masters.length ? `<div class="masters-grid">${content.masters.map(m=>`<article class="master">${m.image?`<img src="${escape(m.image)}" alt="${escape(m.name)}" loading="lazy">`:''}<h3>${escape(m.name)}</h3><p>${escape(m.description)}</p></article>`).join('')}</div>` : '';
+  const profiles=content.masters.length ? `<div class="masters-grid">${content.masters.map(m=>`<article class="master">${m.image?`<img ${photoAttributes(m.image)} alt="${escape(m.name)}" loading="lazy">`:''}<h3>${escape(m.name)}</h3><p>${escape(m.description)}</p></article>`).join('')}</div>` : '';
   const courses=guests.length ? `<div class="guest-courses">${guests.map(c=>`<article class="guest-course"><h3>${escape(c.title)}</h3><p>${escape(c.description)}</p><div class="course-bottom"><span class="course-price">${escape(c.price||'Стоимость уточняется')}</span><button class="course-detail" data-course="${escape(c.id)}">Подробнее ${icon('arrow')}</button></div></article>`).join('')}</div>` : '';
   $('#masters-list').innerHTML=profiles+courses || `<div class="masters-empty">${icon('flower')}<div><h3>${escape(content.copy.mastersEmptyTitle)}</h3><p>${escape(content.copy.mastersEmptyText)}</p></div></div>`;
 }
@@ -127,7 +128,7 @@ function prepareGallery() {
     {image:'/assets/cup.svg',caption:'Тепло, которое можно держать · эскиз'}
   ];
   $('#gallery-note').textContent=content.gallery.length?content.copy.galleryIntro:'Скоро здесь появятся фотографии занятий и первых работ. Пока — эскизы будущей галереи.';
-  $('#gallery-grid').innerHTML=`<div class="gallery-stage"><button class="gallery-feature" data-gallery="0" aria-label="Открыть изображение"><img id="gallery-feature-image" alt="" width="900" height="600" loading="lazy"><span class="gallery-expand" aria-hidden="true">Рассмотреть ↗</span></button><div class="gallery-browser-controls"><button class="icon-button" id="gallery-prev" aria-label="Предыдущее изображение">←</button><span id="gallery-position"></span><button class="icon-button" id="gallery-next" aria-label="Следующее изображение">→</button></div></div><div class="gallery-aside"><svg class="small-sun" aria-hidden="true"><use href="/assets/ornaments.svg#sun"/></svg><h3 id="gallery-feature-caption"></h3><p>${content.gallery.length?'Взгляните на мастерскую поближе. Здесь каждый предмет хранит след прикосновения.':'Здесь будут настоящие моменты мастерской: знакомство с глиной, работа за кругом и вещи, сделанные с душой.'}</p><div class="gallery-thumbs" role="group" aria-label="Выбрать изображение">${galleryItems.map((g,i)=>`<button data-gallery-select="${i}" aria-label="Изображение ${i+1}: ${escape(g.caption)}" aria-pressed="false"><img src="${escape(g.image)}" alt="" width="100" height="100" loading="lazy"></button>`).join('')}</div></div>`;
+  $('#gallery-grid').innerHTML=`<div class="gallery-stage"><button class="gallery-feature" data-gallery="0" aria-label="Открыть изображение"><img id="gallery-feature-image" alt="" width="900" height="600" loading="lazy"><span class="gallery-expand" aria-hidden="true">Рассмотреть ↗</span></button><div class="gallery-browser-controls"><button class="icon-button" id="gallery-prev" aria-label="Предыдущее изображение">←</button><span id="gallery-position"></span><button class="icon-button" id="gallery-next" aria-label="Следующее изображение">→</button></div></div><div class="gallery-aside"><svg class="small-sun" aria-hidden="true"><use href="/assets/ornaments.svg#sun"/></svg><h3 id="gallery-feature-caption"></h3><p>${content.gallery.length?'Взгляните на мастерскую поближе. Здесь каждый предмет хранит след прикосновения.':'Здесь будут настоящие моменты мастерской: знакомство с глиной, работа за кругом и вещи, сделанные с душой.'}</p><div class="gallery-thumbs" role="group" aria-label="Выбрать изображение">${galleryItems.map((g,i)=>`<button data-gallery-select="${i}" aria-label="Изображение ${i+1}: ${escape(g.caption)}" aria-pressed="false"><img ${photoAttributes(g.image,"80px")} alt="" width="100" height="100" loading="lazy"></button>`).join('')}</div></div>`;
   $('#gallery-prev').addEventListener('click',()=>showGallery(galleryIndex-1));
   $('#gallery-next').addEventListener('click',()=>showGallery(galleryIndex+1));
   showGallery(0);
@@ -136,7 +137,7 @@ function showGallery(index) {
   if(!galleryItems.length)return;
   galleryIndex=(index+galleryItems.length)%galleryItems.length;
   const item=galleryItems[galleryIndex];
-  $('#gallery-feature-image').src=item.image;$('#gallery-feature-image').alt=item.caption;
+  setPhoto($('#gallery-feature-image'),item.image,'(max-width: 620px) calc(100vw - 40px), 720px');$('#gallery-feature-image').alt=item.caption;
   $('.gallery-feature').dataset.gallery=String(galleryIndex);
   $('.gallery-feature').setAttribute('aria-label',`Открыть изображение: ${item.caption}`);
   $('#gallery-feature-caption').textContent=item.caption;
@@ -152,7 +153,7 @@ function contactLinks() {
 function openCourse(id, sessionId = '') {
   const course = content.courses.find(c => c.id === id); if (!course) return;
   const options = content.sessions.filter(s => s.courseId === id && new Date(`${s.date}T${s.time}:00+08:00`) >= new Date()).sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`));
-  $('#dialog-content').innerHTML = `<div class="dialog-intro"><div class="dialog-photo-frame"><img src="${escape(artwork(course))}" alt="${escape(course.image ? course.title : 'Эскиз направления')}"></div><div><p>${escape(course.subtitle)}</p><h2 id="dialog-title">${escape(course.title)}</h2><p class="course-meta">${escape([course.price || 'Стоимость уточняется', course.duration, course.age].filter(Boolean).join(' · '))}</p></div></div><p class="dialog-description">${escape(course.details)}</p>${content.bookingEnabled ? `
+  $('#dialog-content').innerHTML = `<div class="dialog-intro"><div class="dialog-photo-frame"><img ${photoAttributes(artwork(course),"240px")} alt="${escape(course.image ? course.title : 'Эскиз направления')}"></div><div><p>${escape(course.subtitle)}</p><h2 id="dialog-title">${escape(course.title)}</h2><p class="course-meta">${escape([course.price || 'Стоимость уточняется', course.duration, course.age].filter(Boolean).join(' · '))}</p></div></div><p class="dialog-description">${escape(course.details)}</p>${content.bookingEnabled ? `
     <form id="booking-form" class="booking-form"><h3>Давайте познакомимся</h3><div class="form-grid"><label class="field">Ваше имя<input name="name" autocomplete="given-name" required minlength="2" maxlength="100"></label><label class="field">Телефон<input type="tel" name="phone" autocomplete="tel" required maxlength="30" minlength="7" placeholder="+7 …"></label><label class="field full">Удобное занятие<select name="sessionId"><option value="">Согласовать дату с мастерской</option>${options.map(s => `<option value="${escape(s.id)}" ${s.id === sessionId ? 'selected' : ''}>${escape(new Intl.DateTimeFormat('ru', { day: 'numeric', month: 'long' }).format(new Date(`${s.date}T12:00:00`)))} · ${escape(s.time)}</option>`).join('')}</select></label><label class="field full">Пожелания <span>(необязательно)</span><textarea name="comment" maxlength="1500" placeholder="Например, хотим прийти всей семьёй"></textarea></label></div><label class="honeypot" aria-hidden="true">Сайт<input name="website" tabindex="-1" autocomplete="off"></label><label class="consent"><input type="checkbox" name="consent" required><span>Согласен на использование имени, телефона и пожеланий мастерской для ответа на эту заявку. Заявку можно удалить, обратившись в мастерскую по указанным контактам. Данные не используются для рассылок.</span></label><button class="button" type="submit">Отправить заявку ${icon('arrow')}</button><p class="form-message" id="booking-message" role="status"></p></form>` : `<div class="booking-notice"><h3>${escape(content.copy.closedBookingTitle)}</h3><p>${escape(content.copy.closedBookingText)}</p>${contactLinks()}<a class="text-link" href="#schedule" id="dialog-schedule">Посмотреть расписание <span aria-hidden="true">↗</span></a></div>`}`;
   showDialog(courseDialog);
   if (content.bookingBotUrl && /^https:\/\//i.test(content.bookingBotUrl)) {
@@ -222,7 +223,7 @@ function render() {
   }
   prepareHero();
   $('#about-title').textContent = content.aboutTitle; $('#about-description').textContent = content.aboutText;
-  if (content.aboutImage) { $('#about-image').src = content.aboutImage; $('#about-image').alt = 'В нашей мастерской'; }
+  if (content.aboutImage) { setPhoto($('#about-image'),content.aboutImage); $('#about-image').alt = 'В нашей мастерской'; }
   selectCategory(category); renderFeatures(); renderSchedule();
   renderMasters();
   prepareGallery();
@@ -235,9 +236,9 @@ function render() {
 $('#gallery-grid').addEventListener('click', e => {
   const thumbnail=e.target.closest('[data-gallery-select]');if(thumbnail){showGallery(Number(thumbnail.dataset.gallerySelect));return;}
   const button = e.target.closest('[data-gallery]'); if (!button) return;
-  const item = galleryItems[Number(button.dataset.gallery)]; $('#lightbox-image').src = item.image; $('#lightbox-image').alt = item.caption; $('#lightbox-caption').textContent = item.caption; showDialog($('#lightbox'));
+  const item = galleryItems[Number(button.dataset.gallery)]; setPhoto($('#lightbox-image'),item.image,'95vw'); $('#lightbox-image').alt = item.caption; $('#lightbox-caption').textContent = item.caption; showDialog($('#lightbox'));
 });
-$('#lightbox').addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();showGallery(galleryIndex+(e.key==='ArrowRight'?1:-1));const item=galleryItems[galleryIndex];$('#lightbox-image').src=item.image;$('#lightbox-image').alt=item.caption;$('#lightbox-caption').textContent=item.caption;}});
+$('#lightbox').addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();showGallery(galleryIndex+(e.key==='ArrowRight'?1:-1));const item=galleryItems[galleryIndex];setPhoto($('#lightbox-image'),item.image,'95vw');$('#lightbox-image').alt=item.caption;$('#lightbox-caption').textContent=item.caption;}});
 async function load() {
   try { const r = await fetch('/api/content'); if (!r.ok) throw new Error(); content = await r.json(); content.copy={...copyDefaults,...content.copy}; render();
     const firstImages=[...document.querySelectorAll('.site-header img, .hero img')].filter(image=>!image.closest('[hidden], .section-screen-hidden'));

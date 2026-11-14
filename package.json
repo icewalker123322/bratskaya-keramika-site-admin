@@ -7,8 +7,14 @@
   "scripts": {
     "dev": "node server.mjs",
     "start": "node server.mjs",
+    "build:pages": "node scripts/build-pages.mjs",
     "check": "node --check server.mjs && node --check public/app.js && node --check public/admin.js && node --check public/copy-defaults.js",
     "test": "node --test scripts/server.test.mjs"
   },
-  "engines": { "node": ">=22" }
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.5"
+  }
 }

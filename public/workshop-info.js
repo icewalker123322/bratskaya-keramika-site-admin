@@ -1,5 +1,7 @@
 import {siteSettings} from './site-settings.js';
 export function renderWorkshopInfo(content) {
+  document.querySelector('#booking-terms')?.remove();
+  document.querySelector('#course-benefits')?.remove();
   const settings={...siteSettings,...content.siteSettings};
   const contacts=document.querySelector('#contact-info');
   const links=[['ВКонтакте',content.socialUrl],['Telegram',content.telegramUrl],['МАКС',content.maxUrl],['Записаться на МК — Telegram-бот',content.bookingBotUrl]];

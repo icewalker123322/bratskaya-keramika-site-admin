@@ -48,7 +48,6 @@ export function setupSections(value){
   const heading=document.createElement('h2');heading.id='directions-title';heading.textContent='Выберите направление';directions.append(heading);
   const grid=document.createElement('div');grid.className='direction-grid';
   for(const [name,title,description,category]of cards){
-   if(!state.content.courses.some(c=>c.category===category))continue;
    const link=document.createElement('a');link.href='#'+name;link.className='direction-link';
    const label=document.createElement('h3');label.textContent=title;const text=document.createElement('p');text.textContent=description;const arrow=document.createElement('span');arrow.textContent='↗';arrow.setAttribute('aria-hidden','true');link.append(label,text,arrow);grid.append(link);
   }
@@ -60,6 +59,10 @@ export function setupSections(value){
    if(!raw||pages[raw]||aliases[raw]){event.preventDefault();navigate(raw);}
   });
   window.addEventListener('hashchange',()=>showPage({focus:true}));
+ }
+ for(const link of document.querySelectorAll('.direction-link')){
+  const name=link.getAttribute('href').slice(1),category=pages[name].category||(name==='kids'?'kids':'');
+  link.hidden=!state.content.courses.some(course=>course.category===category);
  }
  showPage();
 }

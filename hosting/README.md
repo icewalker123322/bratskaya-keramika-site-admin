@@ -1,6 +1,6 @@
 # GitHub Pages + Supabase
 
-Build: `node scripts/build-pages.mjs`. Publish `main:/docs` through GitHub Pages.
+Install build dependencies with `npm ci`, then build with `npm run build:pages`. Publish `main:/docs` through GitHub Pages.
 
 The site is `/`; the editor is `/admin.html` (also `/admin/`). The Node version remains available separately.
 
@@ -12,4 +12,6 @@ Only the public publishable key is included. Never commit passwords, service-rol
 
 Visitor forms are disabled in this deployment; booking uses the Telegram bot and workshop contacts. The editor does not collect booking requests or enable the unsupported Node request API.
 
-The existing deployment and its data are preserved. If Supabase is unavailable, visitors see the bundled snapshot; the editor refuses to load/save rather than silently editing stale data.
+Visitors first see their last cached public content or the bundled snapshot. Supabase is checked in the background on each page load and fresh content updates the current section. If Supabase is unavailable, the site stays usable. The editor always reads the live database and refuses to load/save stale data.
+
+The Pages build generates WebP photos at 160, 640 and up to 1200 pixels, a smaller transparent logo, and responsive image metadata. Originals are preserved. Gallery thumbnails use small images; larger views select appropriate sizes automatically. Newly uploaded admin photos are resized to at most 1600 pixels and encoded as WebP when supported before Storage upload. UUID image names allow long browser caching without overwriting another image.
