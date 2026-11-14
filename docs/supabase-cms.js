@@ -1,4 +1,4 @@
-import {config} from './cms-config.js?v=e9179ffa8b18';
+import {config} from './cms-config.js?v=fe602dce1296';
 let clientPromise,version;
 const root=new URL('./',import.meta.url);
 function paths(value){

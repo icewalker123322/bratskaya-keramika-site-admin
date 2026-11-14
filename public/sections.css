@@ -1,4 +1,7 @@
+/* Focused audit with unslop by Damir Sokolovsky (@heydamir), CC BY 4.0.
+   Preserve the workshop's logo, typefaces, palette and arch frames. */
 .section-screen-hidden{display:none!important}
+#main:focus{outline:none}
 body:not([data-page]) #main>:not(.hero){display:none}
 body[data-page=painting] #booking-terms,body[data-page=crafts] #booking-terms{display:none}
 .page-navigation{display:flex!important;flex-wrap:wrap;justify-content:flex-start;gap:8px!important;overflow:visible!important;padding-block:16px!important}
@@ -8,14 +11,18 @@ body[data-page=painting] #booking-terms,body[data-page=crafts] #booking-terms{di
 .page-navigation a.active{background:var(--wine);border-color:var(--wine);color:var(--paper)}
 .page-navigation a:focus-visible,.direction-link:focus-visible{outline:2px solid var(--wine);outline-offset:4px}
 body[data-page] .filters{display:none}
-.directions{padding-top:25px;padding-bottom:65px}
+.directions{padding-top:24px;padding-bottom:64px}
 .directions h2{font-size:clamp(30px,3vw,42px);margin-bottom:28px}
-.direction-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
-.direction-link{position:relative;display:block;border:1px solid var(--line);padding:27px 24px 50px;text-decoration:none;color:var(--wood);transition:border-color .15s,background .15s}
+.direction-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.direction-link{position:relative;display:block;min-width:0;border:1px solid var(--line);padding:24px 24px 48px;text-decoration:none;color:var(--wood);transition:border-color .15s,background .15s}
 .direction-link:hover{border-color:var(--wine);background:var(--parchment)}
 .direction-link h3{font-family:var(--display);font-size:29px;font-weight:400;line-height:1.2}
-.direction-link p{font-size:12px;line-height:1.7;color:var(--muted);margin-top:13px}
-.direction-link>span{position:absolute;right:22px;bottom:17px;color:var(--wine);font-size:23px}
+.direction-link p{font-size:12px;line-height:1.7;color:var(--muted);margin-top:12px}
+.direction-link>span{position:absolute;right:24px;bottom:16px;color:var(--wine);font-size:24px}
+.course-price,.schedule-event-price,.november-event>span{font-variant-numeric:tabular-nums}
 body[data-page]:not([data-page=home]) #main{min-height:35vh}
 @media(max-width:850px){.direction-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.page-navigation a{padding:9px 12px}}
 @media(max-width:620px){.page-navigation{gap:6px!important;padding-block:12px!important}.page-navigation a{font-size:11px;padding:8px 10px;flex:1 0 auto}.directions{padding-top:16px;padding-bottom:40px}.direction-grid{gap:12px}.direction-link{padding:20px 16px 44px}.direction-link h3{font-size:25px}.direction-link p{font-size:11px}.mobile-nav a.active{color:var(--wine);text-decoration:underline;text-underline-offset:5px}}
+@media(max-width:620px){.page-navigation{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px!important}.page-navigation a{min-width:0;min-height:48px;padding:8px 4px;text-align:center;white-space:normal}}
+@media(max-width:420px){.direction-grid{grid-template-columns:minmax(0,1fr)}.direction-link{padding:20px 48px 20px 20px}.direction-link>span{right:16px;bottom:20px}}
+@media(prefers-reduced-motion:reduce){.page-navigation a,.direction-link{transition:none}}
