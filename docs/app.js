@@ -1,4 +1,4 @@
-import {loadContent} from './supabase-cms.js?v=five-improvements-1';
+import {loadContent} from './supabase-cms.js?v=remove-family-1';
 import { copyDefaults } from './copy-defaults.js?v=five-improvements-1';
 import { renderWorkshopInfo } from './workshop-info.js?v=booking-telegram-1';
 import { setupSections } from './sections.js?v=five-improvements-1';

@@ -11,7 +11,7 @@ async function client(){
  clientPromise??=import('https://esm.sh/@supabase/supabase-js@2.49.1').then(({createClient})=>createClient(config.url,config.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storage:sessionStorage,storageKey:'bratsk-workshop-admin'}}));return clientPromise;
 }
 function check(result){if(result.error)throw Error(result.error.message||'Ошибка Supabase.');return result.data;}
-const cacheKey='workshop-public-v3:'+config.url+root.pathname;
+const cacheKey='workshop-public-v4:'+config.url+root.pathname;
 function validContent(data){return data&&typeof data.name==='string'&&Array.isArray(data.courses)&&Array.isArray(data.gallery);}
 function remember(data){try{localStorage.setItem(cacheKey,JSON.stringify(data));}catch{/* Storage may be disabled. */}}
 async function bundledContent(){
