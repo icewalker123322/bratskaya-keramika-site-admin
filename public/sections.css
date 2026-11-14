@@ -61,3 +61,13 @@ body[data-page]:not([data-page=home]) #main{min-height:35vh}
  .full-timetable>summary{display:list-item;cursor:pointer;padding:20px 0;font-size:15px;color:var(--wine)}
  .full-timetable>summary:focus-visible{outline:2px solid var(--wine);outline-offset:4px}
 }
+
+/* Align the booking action with the right edge of the course dialog. */
+.course-dialog .booking-notice{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:16px;align-items:center}
+.course-dialog .booking-notice>*{grid-column:1/-1}
+.course-dialog #dialog-schedule{grid-column:1;justify-self:start}
+.course-dialog .booking-notice>.course-booking{grid-column:2;justify-self:end}
+@media(max-width:420px){
+ .course-dialog #dialog-schedule,.course-dialog .booking-notice>.course-booking{grid-column:1/-1}
+ .course-dialog .booking-notice>.course-booking{margin-top:16px}
+}
