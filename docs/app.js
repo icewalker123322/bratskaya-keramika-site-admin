@@ -1,6 +1,6 @@
 import {loadContent} from './supabase-cms.js?v=five-improvements-1';
 import { copyDefaults } from './copy-defaults.js?v=five-improvements-1';
-import { renderWorkshopInfo } from './workshop-info.js?v=five-improvements-1';
+import { renderWorkshopInfo } from './workshop-info.js?v=no-telegram-booking-2';
 import { setupSections } from './sections.js?v=five-improvements-1';
 import { photoAttributes, setPhoto } from './images.js?v=five-improvements-1';
 const $ = s => document.querySelector(s);
@@ -34,18 +34,12 @@ $('#mobile-nav').addEventListener('click', e => { if (e.target.closest('a')) clo
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 matchMedia('(min-width: 621px)').addEventListener('change', e => { if (e.matches) closeMenu(); });
 
-function bookingAction() {
-  const url = content.bookingBotUrl || content.telegramUrl || content.socialUrl;
-  if (!url || !/^https:\/\//i.test(url)) return '';
-  return `<a class="button button-small course-booking" href="${escape(url)}" target="_blank" rel="noopener noreferrer">Записаться <span aria-hidden="true">↗</span></a>`;
-}
-
 function renderCourses() {
   const courses = content.courses.filter(c => category === 'all' || c.category === category);
   $('#course-grid').innerHTML = courses.length ? courses.map(c => `<article class="course-card ${category === 'all' && c.category !== 'pottery' ? 'course-card-secondary' : ''}">
     <button class="course-image-button" data-course="${escape(c.id)}" aria-label="Подробнее: ${escape(c.title)}"><img ${photoAttributes(artwork(c))} data-art="${escape(c.art)}" alt="${c.image ? escape(c.title) : 'Графический эскиз керамики'}" width="640" height="520" loading="lazy">${!c.image ? '<span class="course-art-label">Эскиз направления</span>' : ''}</button>
     <p class="course-subtitle">${escape(c.subtitle)}</p><h3 class="course-title">${escape(c.title)}</h3><p class="course-description">${escape(c.description)}</p>${c.duration || c.age ? `<p class="course-meta">${escape([c.duration, c.age].filter(Boolean).join(' · '))}</p>` : ''}
-    <div class="course-bottom"><span class="course-price ${c.price ? '' : 'unset'}">${escape(c.price || 'Стоимость уточняется')}</span><button class="course-detail" data-course="${escape(c.id)}">Подробнее ${icon('arrow')}</button>${bookingAction()}</div></article>`).join('') : '<p class="error-banner">В этом направлении занятия пока не опубликованы.</p>';
+    <div class="course-bottom"><span class="course-price ${c.price ? '' : 'unset'}">${escape(c.price || 'Стоимость уточняется')}</span><button class="course-detail" data-course="${escape(c.id)}">Подробнее ${icon('arrow')}</button></div></article>`).join('') : '<p class="error-banner">В этом направлении занятия пока не опубликованы.</p>';
 }
 $('.filters').addEventListener('click', e => {
   const button = e.target.closest('[data-filter]'); if (!button || !content) return;
@@ -115,7 +109,7 @@ function renderFeatures() {
   const kids=content.courses.filter(c=>c.category==='kids');
   $('#children').hidden=!kids.length;
   for(const link of document.querySelectorAll('a[href="#children"]'))link.hidden=!kids.length;
-  $('#kids-courses').innerHTML=kids.map(c=>`<article class="kids-course"><div class="kids-photo-frame"><img ${photoAttributes(artwork(c))} alt="${escape(c.image?c.title:'Эскиз детского курса')}" width="150" height="170" loading="lazy"></div><div><p class="course-subtitle">${escape(c.subtitle)}</p><h3>${escape(c.title)}</h3><p>${escape(c.description)}</p><div class="kids-course-bottom"><span>${escape([c.price||'Стоимость уточняется',c.age].filter(Boolean).join(' · '))}</span><button class="course-detail" data-course="${escape(c.id)}">О курсе ${icon('arrow')}</button>${bookingAction()}</div></div></article>`).join('');
+  $('#kids-courses').innerHTML=kids.map(c=>`<article class="kids-course"><div class="kids-photo-frame"><img ${photoAttributes(artwork(c))} alt="${escape(c.image?c.title:'Эскиз детского курса')}" width="150" height="170" loading="lazy"></div><div><p class="course-subtitle">${escape(c.subtitle)}</p><h3>${escape(c.title)}</h3><p>${escape(c.description)}</p><div class="kids-course-bottom"><span>${escape([c.price||'Стоимость уточняется',c.age].filter(Boolean).join(' · '))}</span><button class="course-detail" data-course="${escape(c.id)}">О курсе ${icon('arrow')}</button></div></div></article>`).join('');
 }
 
 function renderMasters() {
@@ -124,7 +118,7 @@ function renderMasters() {
   $('[data-filter="guest"]').hidden=!guests.length;
   $('#schedule-filter option[value="guest"]').hidden=!guests.length;
   const profiles=content.masters.length ? `<div class="masters-grid">${content.masters.map(m=>`<article class="master">${m.image?`<img ${photoAttributes(m.image)} alt="${escape(m.name)}" loading="lazy">`:''}<h3>${escape(m.name)}</h3><p>${escape(m.description)}</p></article>`).join('')}</div>` : '';
-  const courses=guests.length ? `<div class="guest-courses">${guests.map(c=>`<article class="guest-course"><h3>${escape(c.title)}</h3><p>${escape(c.description)}</p><div class="course-bottom"><span class="course-price">${escape(c.price||'Стоимость уточняется')}</span><button class="course-detail" data-course="${escape(c.id)}">Подробнее ${icon('arrow')}</button>${bookingAction()}</div></article>`).join('')}</div>` : '';
+  const courses=guests.length ? `<div class="guest-courses">${guests.map(c=>`<article class="guest-course"><h3>${escape(c.title)}</h3><p>${escape(c.description)}</p><div class="course-bottom"><span class="course-price">${escape(c.price||'Стоимость уточняется')}</span><button class="course-detail" data-course="${escape(c.id)}">Подробнее ${icon('arrow')}</button></div></article>`).join('')}</div>` : '';
   $('#masters-list').innerHTML=profiles+courses || `<div class="masters-empty">${icon('flower')}<div><h3>${escape(content.copy.mastersEmptyTitle)}</h3><p>${escape(content.copy.mastersEmptyText)}</p></div></div>`;
 }
 

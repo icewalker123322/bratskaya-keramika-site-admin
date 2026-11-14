@@ -1,11 +1,11 @@
-import {compactSchedule} from './schedule-preview.js?v=five-improvements-1';
+import {compactSchedule} from './schedule-preview.js?v=no-telegram-booking-2';
 import {siteSettings} from './site-settings.js?v=five-improvements-1';
 export function renderWorkshopInfo(content) {
   document.querySelector('#booking-terms')?.remove();
   document.querySelector('#course-benefits')?.remove();
   const settings={...siteSettings,...content.siteSettings};
   const contacts=document.querySelector('#contact-info');
-  const links=[['ВКонтакте',content.socialUrl],['Telegram',content.telegramUrl],['МАКС',content.maxUrl],['Записаться на МК — Telegram-бот',content.bookingBotUrl]];
+  const links=[['ВКонтакте',content.socialUrl],['Telegram',content.telegramUrl],['МАКС',content.maxUrl]];
   contacts.querySelector('a[target="_blank"]')?.remove();
   for(const [label,url] of links){
     if(!url)continue;
