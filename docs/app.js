@@ -1,6 +1,7 @@
 import {loadContent} from './supabase-cms.js';
 import { copyDefaults } from './copy-defaults.js';
 import { renderWorkshopInfo } from './workshop-info.js';
+import { setupSections } from './sections.js';
 const $ = s => document.querySelector(s);
 const escape = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const icon = name => `<svg aria-hidden="true"><use href="./assets/ornaments.svg#${name}"/></svg>`;
@@ -49,9 +50,6 @@ function selectCategory(value) {
   renderCourses();
 }
 document.addEventListener('click', event => {
-  const link = event.target.closest('[data-catalog]'); if (link && content) selectCategory(link.dataset.catalog);
-  const catalogLink = event.target.closest('a[href="#classes"]');
-  if (catalogLink && !catalogLink.hasAttribute('data-catalog') && !catalogLink.hasAttribute('data-course') && content) selectCategory('all');
   const scheduleLink = event.target.closest('[data-schedule-category]');
   if (scheduleLink && content) { $('#schedule-filter').value = scheduleLink.dataset.scheduleCategory; renderSchedule(); }
 });
@@ -232,6 +230,7 @@ function render() {
   $('#contact-info').innerHTML = `${content.address ? `<p>${escape(content.address)}</p>` : ''}${content.hours ? `<p>${escape(content.hours)}</p>` : ''}${contactLinks()}${content.socialUrl ? `<a class="contact-link" href="${escape(content.socialUrl)}" target="_blank" rel="noopener noreferrer">Мы в социальных сетях ↗</a>` : ''}${!content.address && !content.phone && !content.email ? '<p>Адрес и контакты мастерской<br>скоро появятся здесь.</p>' : ''}`;
   $('#copyright').textContent = `${new Date().getFullYear()} · ${content.name}`;
   renderWorkshopInfo(content);
+  setupSections({selectCategory, content});
 }
 $('#gallery-grid').addEventListener('click', e => {
   const thumbnail=e.target.closest('[data-gallery-select]');if(thumbnail){showGallery(Number(thumbnail.dataset.gallerySelect));return;}
