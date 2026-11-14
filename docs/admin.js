@@ -1,7 +1,7 @@
-import {cmsApi as api} from './supabase-cms.js';
-import { siteSettings } from './site-settings.js';
-import { scheduleEditor } from './admin-schedule.js';
-import { copyDefaults, copyGroups } from './copy-defaults.js';
+import {cmsApi as api} from './supabase-cms.js?v=dd6852aeb2af';
+import { siteSettings } from './site-settings.js?v=dd6852aeb2af';
+import { scheduleEditor } from './admin-schedule.js?v=dd6852aeb2af';
+import { copyDefaults, copyGroups } from './copy-defaults.js?v=dd6852aeb2af';
 const $ = s => document.querySelector(s);
 const settingsLabels={discountText:'Скидки и предоплата',termsTitle:'Заголовок условий',termsText:'Что входит в стоимость и сроки обжига',celebrationText:'Праздники и дополнительные услуги',benefitsTitle:'Заголовок преимуществ',benefitsIntro:'Вступление к преимуществам',benefit1Title:'Преимущество 1 — заголовок',benefit1Text:'Преимущество 1 — описание',benefit2Title:'Преимущество 2 — заголовок',benefit2Text:'Преимущество 2 — описание',benefit3Title:'Преимущество 3 — заголовок',benefit3Text:'Преимущество 3 — описание',aboutCaption:'Подпись фото мастерской',togetherCaption:'Подпись фото свидания',galleryText:'Текст рядом с галереей',scheduleFootnote:'Примечание под расписанием'};
 function imagePicker(key,value){

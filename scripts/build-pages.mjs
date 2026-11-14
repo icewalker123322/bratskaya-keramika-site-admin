@@ -1,5 +1,6 @@
 import {readFile,writeFile,mkdir,cp,readdir} from 'node:fs/promises';
 import path from 'node:path';
+import {createHash} from 'node:crypto';
 const root='docs';await mkdir(root,{recursive:true});
 for(const entry of await readdir('public',{withFileTypes:true})){
  if(['uploads','seed-uploads'].includes(entry.name))continue;
@@ -33,6 +34,15 @@ for(const name of await readdir(root)){
 }
 await cp('hosting/supabase-cms.js',root+'/supabase-cms.js');
 await cp('hosting/cms-config.js',root+'/cms-config.js');
+// Version entrypoints and their imports together so returning visitors receive fixes.
+const files=(await readdir(root)).filter(name=>/\.(js|css|html)$/.test(name)).sort();
+const hash=createHash('sha256');
+for(const name of files)hash.update(await readFile(root+'/'+name));
+const release=hash.digest('hex').slice(0,12);
+for(const name of files){
+ const source=await readFile(root+'/'+name,'utf8');
+ await writeFile(root+'/'+name,source.replace(/(["'])\.\/([\w-]+\.(?:js|css))\1/g,(_,quote,file)=>`${quote}./${file}?v=${release}${quote}`));
+}
 await writeFile(root+'/.nojekyll','');await mkdir(root+'/admin',{recursive:true});
 await writeFile(root+'/admin/index.html','<!doctype html><html lang="ru"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=../admin.html"><title>Редактор мастерской</title><a href="../admin.html">Открыть редактор</a></html>');
 console.log('Built GitHub Pages site and Supabase admin');
