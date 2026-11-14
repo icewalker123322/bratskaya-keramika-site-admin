@@ -1,3 +1,4 @@
+import {compactSchedule} from './schedule-preview.js';
 import {siteSettings} from './site-settings.js';
 export function renderWorkshopInfo(content) {
   document.querySelector('#booking-terms')?.remove();
@@ -57,6 +58,7 @@ export function renderWorkshopInfo(content) {
     const contact=document.createElement('p');contact.className='regular-note';contact.textContent='Вопросы по курсам и запись на мастер-классы: ';
     const phone=document.createElement('a');phone.href='tel:'+content.phone.replace(/[^+\d]/g,'');phone.textContent=content.phone;contact.append(phone);section.append(contact);
   }
+  if(Array.isArray(content.novemberSchedule))compactSchedule(section, content);
   if(content.courses.some(c=>c.category==='guest'))document.querySelector('[data-filter="guest"]')?.removeAttribute('hidden');
   if(!document.querySelector('#booking-terms')){
     const terms=document.createElement('div');terms.id='booking-terms';terms.className='booking-terms';

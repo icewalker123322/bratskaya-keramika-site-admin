@@ -26,3 +26,38 @@ body[data-page]:not([data-page=home]) #main{min-height:35vh}
 @media(max-width:620px){.page-navigation{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px!important}.page-navigation a{min-width:0;min-height:48px;padding:8px 4px;text-align:center;white-space:normal}}
 @media(max-width:420px){.direction-grid{grid-template-columns:minmax(0,1fr)}.direction-link{padding:20px 48px 20px 20px}.direction-link>span{right:16px;bottom:20px}}
 @media(prefers-reduced-motion:reduce){.page-navigation a,.direction-link{transition:none}}
+
+/* Keep section headings without introductory captions. */
+#classes .section-intro,#gallery-note{display:none}
+
+/* Readable course names and a compact path from browsing to booking. */
+.course-card .course-title,.kids-course h3,.guest-course h3,.regular-course h3,.november-day-heading h3,.session-title,#dialog-title{font-family:var(--body);font-weight:500;letter-spacing:0;line-height:1.35}
+.course-card .course-title,.kids-course h3,.guest-course h3{font-size:24px}
+.november-day-heading h3,.regular-course h3{font-size:22px}
+#dialog-title{font-size:28px}
+.course-bottom,.kids-course-bottom{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
+.course-bottom .course-price{flex:1 0 100%}
+.course-booking{min-height:44px;padding:10px 16px;font-size:13px;gap:12px}
+.hero-location{font-size:13px;line-height:1.6;color:var(--muted);margin-top:20px;margin-bottom:16px}
+.full-timetable>summary{display:none}
+.upcoming-lessons{display:none}
+@media(max-width:620px){
+ .page-navigation{display:none!important}
+ .mobile-nav:not([hidden]){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:16px 20px;border-bottom:1px solid var(--line)}
+ .mobile-nav a{display:flex;align-items:center;min-height:48px;padding:12px;border:1px solid var(--line);font-size:14px}
+ .mobile-nav a[aria-current=page]{color:var(--wine);border-color:var(--wine)}
+ .hero-location{font-size:12px;margin-top:16px;margin-bottom:8px;text-align:center}
+ .hero-copy h1{min-height:0}
+ .course-card .course-title,.kids-course h3{font-size:22px}
+ .november-day-heading h3{font-size:20px}
+ .upcoming-lessons{display:block;padding-block:24px}
+ .upcoming-lessons>h3{font:500 20px/1.4 var(--body);margin-bottom:20px}
+ .upcoming-lesson{padding:20px 0;border-top:1px solid var(--line)}
+ .upcoming-lesson time{font-size:13px;color:var(--wine);font-variant-numeric:tabular-nums}
+ .upcoming-lesson h4{font:500 16px/1.5 var(--body);margin:8px 0}
+ .upcoming-lesson p{font-size:14px;color:var(--muted)}
+ .upcoming-lessons>.button{margin-top:8px}
+ .full-timetable{border-top:1px solid var(--line)}
+ .full-timetable>summary{display:list-item;cursor:pointer;padding:20px 0;font-size:15px;color:var(--wine)}
+ .full-timetable>summary:focus-visible{outline:2px solid var(--wine);outline-offset:4px}
+}
