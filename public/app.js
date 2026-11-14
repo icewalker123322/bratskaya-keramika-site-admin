@@ -34,7 +34,9 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu();
 matchMedia('(min-width: 621px)').addEventListener('change', e => { if (e.matches) closeMenu(); });
 
 function bookingAction() {
-  return '<a class="button button-small course-booking" href="#contacts">Записаться <span aria-hidden="true">↗</span></a>';
+  const url = content.bookingBotUrl || content.telegramUrl;
+  if (!url || !/^https:\/\//i.test(url)) return '';
+  return `<a class="button button-small course-booking" href="${escape(url)}" target="_blank" rel="noopener noreferrer">Записаться <span aria-hidden="true">↗</span></a>`;
 }
 
 function renderCourses() {
@@ -162,7 +164,7 @@ function openCourse(id, sessionId = '') {
   const notice = $('#dialog-content .booking-notice');
   if (notice) {
     notice.insertAdjacentHTML('beforeend', bookingAction());
-    notice.querySelector('.course-booking').addEventListener('click', () => courseDialog.close());
+    notice.querySelector('.course-booking')?.addEventListener('click', () => courseDialog.close());
   }
   showDialog(courseDialog);
   $('#dialog-schedule')?.addEventListener('click', () => courseDialog.close());

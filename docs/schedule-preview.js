@@ -60,7 +60,12 @@ export function compactSchedule(section, content) {
   }
   const action = document.createElement('a');
   action.className = 'button button-small';
-  action.href = '#contacts';
+  const bookingUrl = content.bookingBotUrl || content.telegramUrl;
+  action.href = bookingUrl || '#contacts';
+  if (bookingUrl && /^https:\/\//i.test(bookingUrl)) {
+    action.target = '_blank';
+    action.rel = 'noopener noreferrer';
+  }
   action.textContent = 'Записаться ↗';
   preview.append(action);
   section.append(preview, full);
