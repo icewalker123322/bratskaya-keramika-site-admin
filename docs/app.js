@@ -163,17 +163,6 @@ function openCourse(id, sessionId = '') {
   $('#dialog-content').innerHTML = `<div class="dialog-intro"><div class="dialog-photo-frame"><img ${photoAttributes(artwork(course),"240px")} alt="${escape(course.image ? course.title : 'Эскиз направления')}"></div><div><p>${escape(course.subtitle)}</p><h2 id="dialog-title">${escape(course.title)}</h2><p class="course-meta">${escape([course.price || 'Стоимость уточняется', course.duration, course.age].filter(Boolean).join(' · '))}</p></div></div><p class="dialog-description">${escape(course.details)}</p>${content.bookingEnabled ? `
     <form id="booking-form" class="booking-form"><h3>Давайте познакомимся</h3><div class="form-grid"><label class="field">Ваше имя<input name="name" autocomplete="given-name" required minlength="2" maxlength="100"></label><label class="field">Телефон<input type="tel" name="phone" autocomplete="tel" required maxlength="30" minlength="7" placeholder="+7 …"></label><label class="field full">Удобное занятие<select name="sessionId"><option value="">Согласовать дату с мастерской</option>${options.map(s => `<option value="${escape(s.id)}" ${s.id === sessionId ? 'selected' : ''}>${escape(new Intl.DateTimeFormat('ru', { day: 'numeric', month: 'long' }).format(new Date(`${s.date}T12:00:00`)))} · ${escape(s.time)}</option>`).join('')}</select></label><label class="field full">Пожелания <span>(необязательно)</span><textarea name="comment" maxlength="1500" placeholder="Например, хотим прийти всей семьёй"></textarea></label></div><label class="honeypot" aria-hidden="true">Сайт<input name="website" tabindex="-1" autocomplete="off"></label><label class="consent"><input type="checkbox" name="consent" required><span>Согласен на использование имени, телефона и пожеланий мастерской для ответа на эту заявку. Заявку можно удалить, обратившись в мастерскую по указанным контактам. Данные не используются для рассылок.</span></label><button class="button" type="submit">Отправить заявку ${icon('arrow')}</button><p class="form-message" id="booking-message" role="status"></p></form>` : `<div class="booking-notice"><h3>${escape(content.copy.closedBookingTitle)}</h3><p>${escape(content.copy.closedBookingText)}</p>${contactLinks()}<a class="text-link" href="#schedule" id="dialog-schedule">Посмотреть расписание <span aria-hidden="true">↗</span></a></div>`}`;
   showDialog(courseDialog);
-  if (content.bookingBotUrl && /^https:\/\//i.test(content.bookingBotUrl)) {
-    const bookingLink = document.createElement('a');
-    bookingLink.className = 'button booking-bot-link';
-    bookingLink.href = content.bookingBotUrl;
-    bookingLink.target = '_blank';
-    bookingLink.rel = 'noopener noreferrer';
-    bookingLink.textContent = 'Записаться через Telegram-бота ↗';
-    const notice = $('#dialog-content .booking-notice');
-    if (notice) notice.querySelector('p').after(bookingLink);
-    else $('#booking-form').before(bookingLink);
-  }
   $('#dialog-schedule')?.addEventListener('click', () => courseDialog.close());
   const form = $('#booking-form'); if (!form) return;
   const requestId = crypto.randomUUID();
