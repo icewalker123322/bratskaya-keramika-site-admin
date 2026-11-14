@@ -1,4 +1,4 @@
-import {compactSchedule} from './schedule-preview.js?v=no-telegram-booking-2';
+import {compactSchedule} from './schedule-preview.js?v=booking-contacts-1';
 import {siteSettings} from './site-settings.js?v=five-improvements-1';
 export function renderWorkshopInfo(content) {
   document.querySelector('#booking-terms')?.remove();

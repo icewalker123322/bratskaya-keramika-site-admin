@@ -58,6 +58,11 @@ export function compactSchedule(section, content) {
     }
     preview.append(row);
   }
+  const action = document.createElement('a');
+  action.className = 'button button-small';
+  action.href = '#contacts';
+  action.textContent = 'Записаться ↗';
+  preview.append(action);
   section.append(preview, full);
   const mobile = matchMedia('(max-width: 620px)');
   full.open = !mobile.matches;

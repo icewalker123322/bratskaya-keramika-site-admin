@@ -1,6 +1,6 @@
 import {loadContent} from './supabase-cms.js?v=five-improvements-1';
 import { copyDefaults } from './copy-defaults.js?v=five-improvements-1';
-import { renderWorkshopInfo } from './workshop-info.js?v=no-telegram-booking-2';
+import { renderWorkshopInfo } from './workshop-info.js?v=booking-contacts-1';
 import { setupSections } from './sections.js?v=five-improvements-1';
 import { photoAttributes, setPhoto } from './images.js?v=five-improvements-1';
 const $ = s => document.querySelector(s);
@@ -34,12 +34,16 @@ $('#mobile-nav').addEventListener('click', e => { if (e.target.closest('a')) clo
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 matchMedia('(min-width: 621px)').addEventListener('change', e => { if (e.matches) closeMenu(); });
 
+function bookingAction() {
+  return '<a class="button button-small course-booking" href="#contacts">Записаться <span aria-hidden="true">↗</span></a>';
+}
+
 function renderCourses() {
   const courses = content.courses.filter(c => category === 'all' || c.category === category);
   $('#course-grid').innerHTML = courses.length ? courses.map(c => `<article class="course-card ${category === 'all' && c.category !== 'pottery' ? 'course-card-secondary' : ''}">
     <button class="course-image-button" data-course="${escape(c.id)}" aria-label="Подробнее: ${escape(c.title)}"><img ${photoAttributes(artwork(c))} data-art="${escape(c.art)}" alt="${c.image ? escape(c.title) : 'Графический эскиз керамики'}" width="640" height="520" loading="lazy">${!c.image ? '<span class="course-art-label">Эскиз направления</span>' : ''}</button>
     <p class="course-subtitle">${escape(c.subtitle)}</p><h3 class="course-title">${escape(c.title)}</h3><p class="course-description">${escape(c.description)}</p>${c.duration || c.age ? `<p class="course-meta">${escape([c.duration, c.age].filter(Boolean).join(' · '))}</p>` : ''}
-    <div class="course-bottom"><span class="course-price ${c.price ? '' : 'unset'}">${escape(c.price || 'Стоимость уточняется')}</span><button class="course-detail" data-course="${escape(c.id)}">Подробнее ${icon('arrow')}</button></div></article>`).join('') : '<p class="error-banner">В этом направлении занятия пока не опубликованы.</p>';
+    <div class="course-bottom"><span class="course-price ${c.price ? '' : 'unset'}">${escape(c.price || 'Стоимость уточняется')}</span><button class="course-detail" data-course="${escape(c.id)}">Подробнее ${icon('arrow')}</button>${bookingAction()}</div></article>`).join('') : '<p class="error-banner">В этом направлении занятия пока не опубликованы.</p>';
 }
 $('.filters').addEventListener('click', e => {
   const button = e.target.closest('[data-filter]'); if (!button || !content) return;
@@ -109,7 +113,7 @@ function renderFeatures() {
   const kids=content.courses.filter(c=>c.category==='kids');
   $('#children').hidden=!kids.length;
   for(const link of document.querySelectorAll('a[href="#children"]'))link.hidden=!kids.length;
-  $('#kids-courses').innerHTML=kids.map(c=>`<article class="kids-course"><div class="kids-photo-frame"><img ${photoAttributes(artwork(c))} alt="${escape(c.image?c.title:'Эскиз детского курса')}" width="150" height="170" loading="lazy"></div><div><p class="course-subtitle">${escape(c.subtitle)}</p><h3>${escape(c.title)}</h3><p>${escape(c.description)}</p><div class="kids-course-bottom"><span>${escape([c.price||'Стоимость уточняется',c.age].filter(Boolean).join(' · '))}</span><button class="course-detail" data-course="${escape(c.id)}">О курсе ${icon('arrow')}</button></div></div></article>`).join('');
+  $('#kids-courses').innerHTML=kids.map(c=>`<article class="kids-course"><div class="kids-photo-frame"><img ${photoAttributes(artwork(c))} alt="${escape(c.image?c.title:'Эскиз детского курса')}" width="150" height="170" loading="lazy"></div><div><p class="course-subtitle">${escape(c.subtitle)}</p><h3>${escape(c.title)}</h3><p>${escape(c.description)}</p><div class="kids-course-bottom"><span>${escape([c.price||'Стоимость уточняется',c.age].filter(Boolean).join(' · '))}</span><button class="course-detail" data-course="${escape(c.id)}">О курсе ${icon('arrow')}</button>${bookingAction()}</div></div></article>`).join('');
 }
 
 function renderMasters() {
@@ -118,7 +122,7 @@ function renderMasters() {
   $('[data-filter="guest"]').hidden=!guests.length;
   $('#schedule-filter option[value="guest"]').hidden=!guests.length;
   const profiles=content.masters.length ? `<div class="masters-grid">${content.masters.map(m=>`<article class="master">${m.image?`<img ${photoAttributes(m.image)} alt="${escape(m.name)}" loading="lazy">`:''}<h3>${escape(m.name)}</h3><p>${escape(m.description)}</p></article>`).join('')}</div>` : '';
-  const courses=guests.length ? `<div class="guest-courses">${guests.map(c=>`<article class="guest-course"><h3>${escape(c.title)}</h3><p>${escape(c.description)}</p><div class="course-bottom"><span class="course-price">${escape(c.price||'Стоимость уточняется')}</span><button class="course-detail" data-course="${escape(c.id)}">Подробнее ${icon('arrow')}</button></div></article>`).join('')}</div>` : '';
+  const courses=guests.length ? `<div class="guest-courses">${guests.map(c=>`<article class="guest-course"><h3>${escape(c.title)}</h3><p>${escape(c.description)}</p><div class="course-bottom"><span class="course-price">${escape(c.price||'Стоимость уточняется')}</span><button class="course-detail" data-course="${escape(c.id)}">Подробнее ${icon('arrow')}</button>${bookingAction()}</div></article>`).join('')}</div>` : '';
   $('#masters-list').innerHTML=profiles+courses || `<div class="masters-empty">${icon('flower')}<div><h3>${escape(content.copy.mastersEmptyTitle)}</h3><p>${escape(content.copy.mastersEmptyText)}</p></div></div>`;
 }
 
@@ -156,6 +160,11 @@ function openCourse(id, sessionId = '') {
   const options = content.sessions.filter(s => s.courseId === id && new Date(`${s.date}T${s.time}:00+08:00`) >= new Date()).sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`));
   $('#dialog-content').innerHTML = `<div class="dialog-intro"><div class="dialog-photo-frame"><img ${photoAttributes(artwork(course),"240px")} alt="${escape(course.image ? course.title : 'Эскиз направления')}"></div><div><p>${escape(course.subtitle)}</p><h2 id="dialog-title">${escape(course.title)}</h2><p class="course-meta">${escape([course.price || 'Стоимость уточняется', course.duration, course.age].filter(Boolean).join(' · '))}</p></div></div><p class="dialog-description">${escape(course.details)}</p>${content.bookingEnabled ? `
     <form id="booking-form" class="booking-form"><h3>Давайте познакомимся</h3><div class="form-grid"><label class="field">Ваше имя<input name="name" autocomplete="given-name" required minlength="2" maxlength="100"></label><label class="field">Телефон<input type="tel" name="phone" autocomplete="tel" required maxlength="30" minlength="7" placeholder="+7 …"></label><label class="field full">Удобное занятие<select name="sessionId"><option value="">Согласовать дату с мастерской</option>${options.map(s => `<option value="${escape(s.id)}" ${s.id === sessionId ? 'selected' : ''}>${escape(new Intl.DateTimeFormat('ru', { day: 'numeric', month: 'long' }).format(new Date(`${s.date}T12:00:00`)))} · ${escape(s.time)}</option>`).join('')}</select></label><label class="field full">Пожелания <span>(необязательно)</span><textarea name="comment" maxlength="1500" placeholder="Например, хотим прийти всей семьёй"></textarea></label></div><label class="honeypot" aria-hidden="true">Сайт<input name="website" tabindex="-1" autocomplete="off"></label><label class="consent"><input type="checkbox" name="consent" required><span>Согласен на использование имени, телефона и пожеланий мастерской для ответа на эту заявку. Заявку можно удалить, обратившись в мастерскую по указанным контактам. Данные не используются для рассылок.</span></label><button class="button" type="submit">Отправить заявку ${icon('arrow')}</button><p class="form-message" id="booking-message" role="status"></p></form>` : `<div class="booking-notice"><h3>${escape(content.copy.closedBookingTitle)}</h3><p>${escape(content.copy.closedBookingText)}</p>${contactLinks()}<a class="text-link" href="#schedule" id="dialog-schedule">Посмотреть расписание <span aria-hidden="true">↗</span></a></div>`}`;
+  const notice = $('#dialog-content .booking-notice');
+  if (notice) {
+    notice.insertAdjacentHTML('beforeend', bookingAction());
+    notice.querySelector('.course-booking').addEventListener('click', () => courseDialog.close());
+  }
   showDialog(courseDialog);
   $('#dialog-schedule')?.addEventListener('click', () => courseDialog.close());
   const form = $('#booking-form'); if (!form) return;
