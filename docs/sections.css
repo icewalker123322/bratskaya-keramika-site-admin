@@ -71,3 +71,9 @@ body[data-page]:not([data-page=home]) #main{min-height:35vh}
  .course-dialog #dialog-schedule,.course-dialog .booking-notice>.course-booking{grid-column:1/-1}
  .course-dialog .booking-notice>.course-booking{margin-top:16px}
 }
+
+/* Bring the first heading of each section closer to the navigation. */
+body[data-page]:not([data-page=home]) #main>:is(#classes,#children,#schedule,#gallery,#about,#together){padding-top:40px}
+@media(max-width:620px){
+ body[data-page]:not([data-page=home]) #main>:is(#classes,#children,#schedule,#gallery,#about,#together){padding-top:24px}
+}
