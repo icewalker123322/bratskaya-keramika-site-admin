@@ -40,7 +40,7 @@ export function setupSections(value){
  state=value;
  if(!initialized){
   initialized=true;
-  const navHTML=Object.entries(pages).filter(([name])=>name!=='together').map(([name,page])=>`<a href="#${name}" data-section-page="${name}">${page.label}</a>`).join('');
+  const navHTML=Object.entries(pages).filter(([name])=>!['together','contacts'].includes(name)).map(([name,page])=>`<a href="#${name}" data-section-page="${name}">${page.label}</a>`).join('');
   const navigation=document.querySelector('.section-nav');navigation.innerHTML=navHTML;navigation.classList.add('page-navigation');navigation.setAttribute('aria-label','Разделы сайта');
   document.querySelector('#mobile-nav').innerHTML=navHTML;
   const directions=document.createElement('section');directions.id='directions';directions.className='section wrap directions';directions.setAttribute('aria-labelledby','directions-title');

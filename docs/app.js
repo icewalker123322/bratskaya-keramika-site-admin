@@ -1,7 +1,7 @@
-import {loadContent} from './supabase-cms.js?v=dd6852aeb2af';
-import { copyDefaults } from './copy-defaults.js?v=dd6852aeb2af';
-import { renderWorkshopInfo } from './workshop-info.js?v=dd6852aeb2af';
-import { setupSections } from './sections.js?v=dd6852aeb2af';
+import {loadContent} from './supabase-cms.js?v=fa4d011d3785';
+import { copyDefaults } from './copy-defaults.js?v=fa4d011d3785';
+import { renderWorkshopInfo } from './workshop-info.js?v=fa4d011d3785';
+import { setupSections } from './sections.js?v=fa4d011d3785';
 const $ = s => document.querySelector(s);
 const escape = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const icon = name => `<svg aria-hidden="true"><use href="./assets/ornaments.svg#${name}"/></svg>`;

@@ -1,4 +1,4 @@
-import {siteSettings} from './site-settings.js?v=dd6852aeb2af';
+import {siteSettings} from './site-settings.js?v=fa4d011d3785';
 export function renderWorkshopInfo(content) {
   const settings={...siteSettings,...content.siteSettings};
   const contacts=document.querySelector('#contact-info');
